@@ -2,7 +2,10 @@ use super::entity::Entity;
 use super::physics::{
     fv,
     fa,
-    rk4
+    rk4,
+    fv_ent,
+    fa_ent,
+    rk4_2d
 };
 
 #[derive(Debug)]
@@ -44,8 +47,15 @@ impl World {
             e.pos[0] = x;
             e.vel[0] = v;
         }
+        self.time += self.time_step;
+    }
 
-
+    pub fn update_2d(&mut self) {
+        for e in &mut self.ents {
+            let mut ent: Entity;
+            let (_, ent) = rk4_2d(self.time_step, self.time, &e, fv_ent, fa_ent);
+            *e = ent;
+        }
         self.time += self.time_step;
     }
 }

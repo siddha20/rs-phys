@@ -44,7 +44,7 @@ impl Painter {
     pub fn paint(&mut self, world: &World) {
         for e in world.get_ents() {
             self.canvas.set_draw_color(Color::RGB(255, 255, 255));
-            // println!("x: {}, y: {}", e.pos[0] as i32, e.pos[1] as i32);
+            println!("x: {}, y: {}", e.pos[0] as i32, e.pos[1] as i32);
             self.canvas.fill_rect(Rect::new(e.pos[0] as i32, 
                                             e.pos[1] as i32, 
                                             e.shape.height, 

@@ -6,7 +6,10 @@ use driver::world::World;
 use driver::physics::{
     fv,
     fa,
-    rk4
+    rk4,
+    fv_ent,
+    fa_ent,
+    rk4_2d
 };
 use painter::Painter;
 
@@ -14,8 +17,14 @@ use painter::Painter;
 pub fn main() {
     let mut world = World::new();
     let mut e1 = Entity::new();
-    e1.shape.height = 7;
-    e1.shape.width = 7;
+    e1.pos[0] = 150.0;
+    e1.pos[1] = 100.0;
+    e1.vel[0] = 3000.0;
+    // e1.vel[1] = -5000.0;
+    e1.mass = 1.0;
+    e1.shape.height = 10;
+    e1.shape.width = 10;
+    world.add_entity(e1);
 
     /* spam a bunch of entities */
     /*
@@ -30,10 +39,11 @@ pub fn main() {
 
     let mut painter = Painter::init("sid engine", 800, 600);
     world.set_time_step(0.0016);
+    painter.clear();
     'main_loop: loop {
         painter.clear();
 
-        world.update();
+        world.update_2d();
 
         if painter.check_quit() {
             break 'main_loop;
@@ -56,17 +66,44 @@ pub fn main() {
     // world.update();
     // println!("{:#?}", world);
 
+
+    /* test rk4 */
+    /*
     let T: f64 = 5.0;
     let K: f64 = 100.0;
 
     let dt = T/K;
     let mut t: f64 = 0.0;
-    let mut x: f64 = 103.0;
+    let mut x: f64 = 0.0;
     let mut v: f64 = 0.0;
     for i in 0..K as u32 {
         (t, x, v) = rk4(dt, t, x, v, fv, fa);
         println!("i: {}, t: {}, v: {}, x: {}", i, t, v, x);
     }
+    */
+
+    /* test rk4_2d */
+    /*
+    let T: f64 = 5.0;
+    let K: f64 = 100.0;
+
+    let dt = T/K;
+    let mut t: f64 = 0.0;
+    let mut e1: Entity;
+    let mut e = Entity::new();
+    e.pos[0] = 0.0;
+    e.pos[1] = 200.0;
+    e.mass = 1.0;
+    e.shape.height = 7;
+    e.shape.width = 7;
+    for i in 0..K as u32 {
+        (t, e1) = rk4_2d(dt, t, &e, fv_ent, fa_ent);
+        e = e1;
+        println!("i: {}, t: {}, x: {}, v: {}", i, t, e.pos, e.vel);
+    }
+    */
+
+
 
 
 }
