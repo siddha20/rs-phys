@@ -1,5 +1,6 @@
 mod driver;
 mod painter;
+use std::time::Duration;
 use driver::entity::Entity;
 use driver::world::World;
 use driver::physics::{
@@ -10,42 +11,60 @@ use driver::physics::{
 use painter::Painter;
 
 
-
-// fn render_entities(canvas: &mut Canvas<Window>, entities: &Vec<Entity>) {
-
-// }
-
-// fn render_recs(canvas: &mut Canvas<Window>, rects: &Vec<Rec>) {
-//     canvas.set_draw_color(Color::RGB(0, 0, 0));
-//     canvas.clear();
-//     for r in rects {
-//         canvas.set_draw_color(Color::RGB(r.x as u8, r.y as u8, 8));
-//         canvas.fill_rect(Rect::new(r.x, r.y, r.height, r.width)).unwrap();
-//     }
-//     canvas.present();
-// }
-
-
-
-
-
 pub fn main() {
     let mut world = World::new();
-    world.add_entity(Entity::new());
-    println!("{:#?}", world);
+    let mut e1 = Entity::new();
+    e1.shape.height = 7;
+    e1.shape.width = 7;
 
-    let mut painter = Painter::init("name");
-    // painter.test();
+    /* spam a bunch of entities */
+    /*
+    for j in 0..10 { 
+        for i in 0..34 {
+            e1.pos[0] = 100.0 + i as f64 * 10.0 + j as f64 * 20.0;
+            e1.pos[1] = 20.0 + i as f64 * 20.0;
+            world.add_entity(e1.clone());
+        }
+    }
+    */
+
+    let mut painter = Painter::init("sid engine", 800, 600);
+    world.set_time_step(0.0016);
+    'main_loop: loop {
+        painter.clear();
+
+        world.update();
+
+        if painter.check_quit() {
+            break 'main_loop;
+        }
+
+        painter.paint(&world);
+        painter.present();
+
+        // render delay
+        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
+
+    }
+
+
+
+
+
+
+    // println!("{:#?}", world);
+    // world.update();
+    // println!("{:#?}", world);
 
     let T: f64 = 5.0;
-    let K: f64 = 1000.0;
+    let K: f64 = 100.0;
 
     let dt = T/K;
     let mut t: f64 = 0.0;
-    let mut x: f64 = 3.0;
+    let mut x: f64 = 103.0;
     let mut v: f64 = 0.0;
     for i in 0..K as u32 {
-        (t, v, x) = rk4(dt, t, x, v, fv, fa);
+        (t, x, v) = rk4(dt, t, x, v, fv, fa);
         println!("i: {}, t: {}, v: {}, x: {}", i, t, v, x);
     }
 

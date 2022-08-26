@@ -1,11 +1,10 @@
 use crate::driver::world::World;
 
-
+use std::time::Duration;
 use sdl2::pixels::Color;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::rect::Rect;
-use std::time::Duration;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 use sdl2::Sdl;
@@ -20,11 +19,11 @@ pub struct Painter {
 }
 
 impl Painter {
-    pub fn init(window_name: &str) -> Self {
+    pub fn init(window_name: &str, height: u32, width: u32) -> Self {
         let sdl_context = sdl2::init().unwrap();
         let video_subsystem = sdl_context.video().unwrap();
         let mut event_pump = sdl_context.event_pump().unwrap();
-        let window = video_subsystem.window("engine demo", 800, 600)
+        let window = video_subsystem.window(window_name, height, width)
             .position_centered()
             .build()
             .unwrap();
@@ -35,6 +34,40 @@ impl Painter {
             event_pump: event_pump,
             canvas: canvas
         }
+    }
+
+    pub fn clear(&mut self) {
+        self.canvas.set_draw_color(Color::RGB(0, 0, 0));
+        self.canvas.clear();
+    }
+    
+    pub fn paint(&mut self, world: &World) {
+        for e in world.get_ents() {
+            self.canvas.set_draw_color(Color::RGB(255, 255, 255));
+            // println!("x: {}, y: {}", e.pos[0] as i32, e.pos[1] as i32);
+            self.canvas.fill_rect(Rect::new(e.pos[0] as i32, 
+                                            e.pos[1] as i32, 
+                                            e.shape.height, 
+                                            e.shape.width))
+                       .unwrap();
+        }
+    }
+
+    pub fn present(&mut self) {
+        self.canvas.present();
+    }
+
+    pub fn check_quit(&mut self) -> bool {
+        for event in self.event_pump.poll_iter() {
+            match event {
+                Event::Quit {..} |
+                Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
+                    return true;
+                },
+                _ => {}
+            }
+        }
+        false
     }
 
     pub fn test(&mut self) {

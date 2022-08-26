@@ -1,9 +1,9 @@
 use ndarray::Array1;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Rec {
-    height: u32,
-    width: u32
+    pub height: u32,
+    pub width: u32
 }
 
 impl Rec {
@@ -15,23 +15,32 @@ impl Rec {
     }
 }
 
-
-
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Entity { 
-    pub Shape: Rec,
-    pub pos: Array1::<f32>,
-    pub vel: Array1::<f32>,
-    pub accel: Array1::<f32>
+    pub shape: Rec,
+    pub pos: Array1::<f64>,
+    pub vel: Array1::<f64>,
+    pub accel: Array1::<f64>
 }
 
 impl Entity {
     pub fn new() -> Self {
         Entity {
-            Shape: Rec::new(0, 0),
+            shape: Rec::new(0, 0),
             pos: Array1::zeros(2),
             vel: Array1::zeros(2),
             accel: Array1::zeros(2)
+        }
+    }
+
+    pub fn create(rec: Rec, pos: Array1::<f64>, 
+                  vel: Array1::<f64>, 
+                  accel: Array1::<f64> ) -> Self {
+        Entity {
+            shape: rec,
+            pos: pos,
+            vel: vel,
+            accel: accel
         }
     }
 }

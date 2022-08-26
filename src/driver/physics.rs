@@ -1,18 +1,22 @@
 use super::entity::Entity;
 
+type func_t_x_v = fn(t: f64, x: f64, v: f64) -> f64;
+
+
+
 impl Entity {
 
 }
 
-type func_t_x_v = fn(t: f64, x: f64, v: f64) -> f64;
 
 pub fn fv(t: f64, x: f64, v: f64) -> f64 {
     v
 }
 
 //k = 9, m = 17
+// x is distance from spring
 pub fn fa(t: f64, x:f64, v: f64) -> f64 {
-    -(9.0/17.0)*x
+    -(1000.0/1.0) * (x-300.0)
 }
 
 
@@ -30,5 +34,5 @@ pub fn rk4(dt: f64, t: f64,  x: f64, v: f64, fv: func_t_x_v, fa: func_t_x_v) -> 
     let x1 = x + ((dt/6.0)*(k1x + 2.0*k2x + 2.0*k3x + k4x));
     let t1 = t + dt;
 
-    (t1, v1, x1)
+    (t1, x1, v1)
 }
