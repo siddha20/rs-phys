@@ -15,15 +15,17 @@ pub struct Painter {
     sdl_context: Sdl,
     video_subsystem: VideoSubsystem,
     event_pump: EventPump,
-    canvas: Canvas<Window>
+    canvas: Canvas<Window>,
+    canvas_height: u32,
+    canvas_width: u32
 }
 
 impl Painter {
-    pub fn init(window_name: &str, height: u32, width: u32) -> Self {
+    pub fn init(window_name: &str, width: u32, height: u32) -> Self {
         let sdl_context = sdl2::init().unwrap();
         let video_subsystem = sdl_context.video().unwrap();
         let mut event_pump = sdl_context.event_pump().unwrap();
-        let window = video_subsystem.window(window_name, height, width)
+        let window = video_subsystem.window(window_name, width, height)
             .position_centered()
             .build()
             .unwrap();
@@ -32,7 +34,9 @@ impl Painter {
             sdl_context:  sdl_context,
             video_subsystem: video_subsystem,
             event_pump: event_pump,
-            canvas: canvas
+            canvas: canvas,
+            canvas_height: height,
+            canvas_width: width
         }
     }
 
@@ -45,10 +49,11 @@ impl Painter {
         for e in world.get_ents() {
             self.canvas.set_draw_color(Color::RGB(255, 255, 255));
             println!("x: {}, y: {}", e.pos[0] as i32, e.pos[1] as i32);
+            let adjust_y = self.canvas_height - e.shape.height;
             self.canvas.fill_rect(Rect::new(e.pos[0] as i32, 
-                                            e.pos[1] as i32, 
-                                            e.shape.height, 
-                                            e.shape.width))
+                                            adjust_y as i32 - e.pos[1] as i32, 
+                                            e.shape.width, 
+                                            e.shape.height))
                        .unwrap();
         }
     }

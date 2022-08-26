@@ -17,25 +17,26 @@ use painter::Painter;
 pub fn main() {
     let mut world = World::new();
     let mut e1 = Entity::new();
-    e1.pos[0] = 150.0;
+    e1.pos[0] = 100.0;
     e1.pos[1] = 100.0;
-    e1.vel[0] = 3000.0;
-    // e1.vel[1] = -5000.0;
+    // e1.vel[0] = 800.0;
+    // e1.vel[1] = 1000.0;
     e1.mass = 1.0;
     e1.shape.height = 10;
     e1.shape.width = 10;
     world.add_entity(e1);
 
+
     /* spam a bunch of entities */
-    /*
-    for j in 0..10 { 
-        for i in 0..34 {
-            e1.pos[0] = 100.0 + i as f64 * 10.0 + j as f64 * 20.0;
-            e1.pos[1] = 20.0 + i as f64 * 20.0;
-            world.add_entity(e1.clone());
-        }
-    }
-    */
+    
+    // for j in 0..10 { 
+    //     for i in 0..34 {
+    //         e1.pos[0] = 100.0 + i as f64 * 10.0 + j as f64 * 20.0;
+    //         e1.pos[1] = 20.0 + i as f64 * 20.0;
+    //         world.add_entity(e1.clone());
+    //     }
+    // }
+    
 
     let mut painter = Painter::init("sid engine", 800, 600);
     world.set_time_step(0.0016);

@@ -47,7 +47,9 @@ pub fn fv_ent(t: f64, ent: &Entity) -> Array1::<f64> {
 }
 
 pub fn fa_ent(t: f64, ent: &Entity) -> Array1::<f64> {
-    -(1000.0/ent.mass) * (ent.pos.clone() - array![300.0, 200.0])
+    -((1000.0/ent.mass) * (&ent.pos - array![300.0, 200.0])) - ((10.0 * &ent.vel)/ent.mass)
+    // array![0.0, -5000.0]
+    // array![0.0, 0.0]
 }
 
 pub fn rk4_2d(dt: f64, t: f64, ent: &Entity, fv: func_t_ent, fa: func_t_ent) -> (f64, Entity) { // -> (f64, Array1::<f64>, Array1::<f64>) {
